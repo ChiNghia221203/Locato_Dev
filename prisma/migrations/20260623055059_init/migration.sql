@@ -15,4 +15,4 @@ CREATE TABLE "file_assets" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "file_assets_key_key" ON "file_assets"("key");
+CREATE UNIQUE INDEX "file_assets_bucket_key_key" ON "file_assets"("bucket", "key");

@@ -10,7 +10,7 @@ datasource db {
 
 model FileAsset {
   id        String   @id @default(cuid())
-  key       String   @unique
+  key       String
   bucket    String
   url       String?
   fileName  String
@@ -20,5 +20,6 @@ model FileAsset {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([bucket, key])
   @@map("file_assets")
 }

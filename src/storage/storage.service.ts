@@ -175,7 +175,7 @@ export class StorageService {
             }),
         );
 
-        await this.prisma.fileAsset.deleteMany({ where: { key } });
+        await this.prisma.fileAsset.deleteMany({ where: { bucket: this.bucket, key } });
     }
 
     async objectExists(key: string): Promise<boolean> {
@@ -203,25 +203,30 @@ export class StorageService {
         const fileName = input.fileName ?? input.key.split('/').pop() ?? input.key;
         const isPublic = input.isPublic ?? this.defaultAclPublic;
 
-        const asset = await this.prisma.fileAsset.upsert({
-            where: { key: input.key },
-            create: {
-                key: input.key,
-                bucket: this.bucket,
-                url,
-                fileName,
-                mimeType: input.contentType,
-                size: input.size,
-                isPublic,
-            },
-            update: {
-                url,
-                fileName,
-                mimeType: input.contentType,
-                size: input.size,
-                isPublic,
-            },
+        const data = {
+            url,
+            fileName,
+            mimeType: input.contentType,
+            size: input.size,
+            isPublic,
+        };
+
+        const existing = await this.prisma.fileAsset.findFirst({
+            where: { bucket: this.bucket, key: input.key },
         });
+
+        const asset = existing
+            ? await this.prisma.fileAsset.update({
+                  where: { id: existing.id },
+                  data,
+              })
+            : await this.prisma.fileAsset.create({
+                  data: {
+                      ...data,
+                      key: input.key,
+                      bucket: this.bucket,
+                  },
+              });
 
         return {
             id: asset.id,

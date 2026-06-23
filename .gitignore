@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+
+# Prisma local sqlite (legacy)
+prisma/*.db
+prisma/*.db-journal
+
+*.log

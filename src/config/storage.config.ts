@@ -32,6 +32,10 @@ class EnvironmentVariablesValidator {
     @IsOptional()
     @IsString()
     STORAGE_DEFAULT_PUBLIC?: string;
+
+    @IsOptional()
+    @IsString()
+    STORAGE_FORCE_PATH_STYLE?: string;
 }
 
 export default registerAs<StorageConfig>('storage', () => {
@@ -47,6 +51,11 @@ export default registerAs<StorageConfig>('storage', () => {
     const defaultRegion =
         provider === 'r2' ? 'auto' : provider === 'minio' ? 'us-east-1' : 'ap-southeast-1';
 
+    const forcePathStyle =
+        process.env.STORAGE_FORCE_PATH_STYLE !== undefined
+            ? process.env.STORAGE_FORCE_PATH_STYLE === 'true'
+            : provider === 'minio';
+
     return {
         provider,
         endpoint,
@@ -56,5 +65,6 @@ export default registerAs<StorageConfig>('storage', () => {
         secretAccessKey: process.env.STORAGE_SECRET_ACCESS_KEY!,
         publicBaseUrl: process.env.STORAGE_PUBLIC_BASE_URL,
         defaultPublic: process.env.STORAGE_DEFAULT_PUBLIC === 'true',
+        forcePathStyle,
     };
 });

@@ -9,6 +9,7 @@ export interface StorageConfig {
     secretAccessKey: string;
     publicBaseUrl?: string;
     defaultPublic: boolean;
+    forcePathStyle: boolean;
 }
 
 export interface DatabaseConfig {

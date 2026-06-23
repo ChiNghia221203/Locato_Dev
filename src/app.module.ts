@@ -3,8 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 import storageConfig from './config/storage.config';
+import { FileAssetModule } from './modules/file-asset/file-asset.module';
+import { StorageModule } from './modules/storage/storage.module';
+import { UploadModule } from './modules/upload/upload.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { StorageModule } from './storage/storage.module';
 
 @Module({
     imports: [
@@ -15,6 +17,8 @@ import { StorageModule } from './storage/storage.module';
         }),
         PrismaModule,
         StorageModule,
+        FileAssetModule,
+        UploadModule,
     ],
 })
 export class AppModule {}
